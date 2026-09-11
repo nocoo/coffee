@@ -1,0 +1,43 @@
+{
+  "project": "coffee",
+  "study": "artwork/logo-family/coffee/2026-09-11-01",
+  "finishing": "01",
+  "sourceMode": "isolated-white",
+  "rawSha256": "b195d997f71efda0ce9a232b952adb767e45716bdb33d6c29fb1bb331503d8c9",
+  "approval": "Owner approved both displayed native images with “通过，继续”.",
+  "masterFiles": [
+    {
+      "path": "logo.png",
+      "role": "transparent",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 4374884,
+      "sha256": "d00ad151f073a71b2b324b86903154551a8acd38d91d53f83fae9d661e0cb124"
+    },
+    {
+      "path": "assets/brand/icon.png",
+      "role": "icon",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 5756219,
+      "sha256": "2e781520ad77b86f9a0190093096adb8a322a32c0c901deadab4da057ee97904"
+    },
+    {
+      "path": "assets/brand/icon-rounded.png",
+      "role": "rounded",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 5695474,
+      "sha256": "e21430985eb062c5b6366644dd7c3ef412c04915e37781a08087e5e8d6a52c33"
+    },
+    {
+      "path": "assets/brand/background.png",
+      "role": "Independent presentation background for platform-safe PWA placement",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 1666532,
+      "sha256": "179c4fc87afec72ed2b1f14171429a0f0729abf9029c7311b1ba1ad98bdf9a2c"
+    }
+  ],
+  "scope": "Local source adoption; no push or deployment."
+}

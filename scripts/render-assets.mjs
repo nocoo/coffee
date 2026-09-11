@@ -1,20 +1,39 @@
 import { readFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 
-// Reproducible original artwork. No network calls or third-party image assets.
+// Render the approved, archived masters locally. No network or generation calls.
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= '.work/browsers';
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ deviceScaleFactor: 1 });
   const page = await context.newPage();
-  const icon = await readFile(new URL('../public/favicon.svg', import.meta.url), 'utf8');
-  for (const size of [192, 512]) {
+  const png = async (file) =>
+    `data:image/png;base64,${(await readFile(new URL(file, import.meta.url))).toString('base64')}`;
+  const foreground = await png('../logo.png');
+  const presentation = await png('../assets/brand/icon.png');
+  const rounded = await png('../assets/brand/icon-rounded.png');
+  const background = await png('../assets/brand/background.png');
+  for (const [file, size, image] of [
+    ['favicon-16.png', 16, foreground],
+    ['favicon.png', 32, foreground],
+    ['logo-80.png', 80, foreground],
+    ['icon-192.png', 192, presentation],
+    ['icon-512.png', 512, presentation],
+  ]) {
     await page.setViewportSize({ width: size, height: size });
     await page.setContent(
-      `<style>body{margin:0;background:#f8f6f0}svg{width:100vw;height:100vh;display:block}</style>${icon}`,
+      `<style>body{margin:0}img{width:100vw;height:100vh;display:block}</style><img src="${image}" alt="">`,
     );
-    await page.screenshot({ path: `public/icon-${size}.png` });
+    await page.evaluate(() => document.images[0].decode());
+    await page.screenshot({ path: `public/${file}`, omitBackground: true });
   }
+  // A 94% whole-foreground placement fits the PWA's central 40%-radius safe circle.
+  await page.setViewportSize({ width: 512, height: 512 });
+  await page.setContent(
+    `<style>body{margin:0}img{position:absolute;width:512px;height:512px}.mark{inset:3%;width:94%;height:94%;filter:drop-shadow(1px 3px 4px #825b5024)}</style><img src="${background}" alt=""><img class="mark" src="${foreground}" alt="">`,
+  );
+  await page.evaluate(() => Promise.all([...document.images].map((image) => image.decode())));
+  await page.screenshot({ path: 'public/icon-maskable-512.png' });
   const font = async (file) =>
     (await readFile(new URL(`../public/fonts/${file}.woff2`, import.meta.url))).toString('base64');
   const serif = await font('instrument-serif-latin');
@@ -56,14 +75,14 @@ try {
     *{box-sizing:border-box}body{margin:0;background:#f8f6f0;color:#36352f;font-family:Sans,sans-serif}
     main{position:relative;width:1536px;height:1024px;padding:72px 90px;overflow:hidden}
     header{display:flex;align-items:center;justify-content:space-between;padding-bottom:32px;border-bottom:1px solid #dcd9d0}
-    .logo{display:flex;align-items:center;font-family:Serif;font-size:62px;gap:14px}.logo svg{width:58px;height:58px}
+    .logo{display:flex;align-items:center;font-family:Serif;font-size:62px;gap:14px}.logo img{width:76px;height:76px}
     .micro{font-size:15px;letter-spacing:2.3px}section{position:absolute;top:287px;width:685px;z-index:1}
     h1{font-family:Serif;font-weight:400;font-size:113px;line-height:.98;letter-spacing:-3px;margin:28px 0 30px}
     h1 em{display:block;color:#728a63}p{font-size:22px;line-height:1.8;color:#6c6b61;max-width:545px}
     .wheel{position:absolute;left:840px;top:232px;width:635px;height:635px;transform:rotate(-14deg)}
     footer{position:absolute;bottom:65px;left:90px;right:90px;display:flex;justify-content:space-between;border-top:1px solid #dcd9d0;padding-top:30px;font-size:16px;color:#6c6b61}
   </style></head><body><main>
-    <header><div class="logo">${icon}<span>coffee.</span></div><span class="micro">A COFFEE FLAVOR UNIVERSE</span></header>
+    <header><div class="logo"><img src="${rounded}" alt=""><span>coffee.</span></div><span class="micro">A COFFEE FLAVOR UNIVERSE</span></header>
     <section><span class="micro">FOR THE EVER-CURIOUS PALATE</span><h1>A little curiosity.<em>A world of flavor.</em></h1><p>96 flavors. 23 origins. 10 ways to brew.<br>Follow your senses, one cup at a time.</p></section>
     <svg class="wheel" viewBox="-355 -355 710 710" aria-hidden="true"><defs>
       <radialGradient id="ceramic" cx="30%" cy="25%"><stop stop-color="#fff5e7"/><stop offset="1" stop-color="#e5bbac"/></radialGradient>
@@ -74,8 +93,11 @@ try {
     <footer><span>Sip slowly. Stay curious.</span><span>COFFEE.HEXLY.AI</span></footer>
   </main></body></html>`);
   await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => Promise.all([...document.images].map((image) => image.decode())));
   await page.screenshot({ path: 'public/og.png' });
-  console.log('Rendered original icons (192², 512²) and OpenGraph image (1536×1024).');
+  console.log(
+    'Rendered transparent marks (16², 32², 80²), platform icons (192², 512², maskable 512²) and OpenGraph image (1536×1024).',
+  );
 } finally {
   await browser.close();
 }

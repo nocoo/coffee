@@ -7,14 +7,7 @@ import { useCoffee } from '../lib/context';
 export function Logo({ small = false }: { small?: boolean }) {
   return (
     <span className={`brand ${small ? 'brand-small' : ''}`}>
-      <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <path
-          d="M20 4C22 12 26 15 35 13C30 19 30 24 35 29C27 27 22 29 20 37C18 29 13 27 5 29C10 24 10 19 5 13C14 15 18 12 20 4Z"
-          fill="currentColor"
-        />
-        <ellipse cx="20" cy="21" rx="5.1" ry="7.1" fill="var(--bg)" transform="rotate(28 20 21)" />
-        <path d="M23 15C18 19 23 23 17 27" stroke="currentColor" strokeWidth="1.4" />
-      </svg>
+      <img className="brand-mark" src="/logo-80.png" width="38" height="38" alt="" />
       <span>
         coffee<span className="brand-period">.</span>
       </span>

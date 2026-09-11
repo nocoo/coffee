@@ -253,7 +253,7 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 28px;
   gap: 6px;
 }
-.brand-small svg {
+.brand-small .brand-mark {
   width: 30px;
   height: 30px;
 }
@@ -1704,7 +1704,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .brand {
     font-size: 31px;
   }
-  .brand svg {
+  .brand .brand-mark {
     width: 33px;
     height: 33px;
   }
@@ -1880,7 +1880,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .brand {
     font-size: 30px;
   }
-  .brand svg {
+  .brand .brand-mark {
     width: 30px;
     height: 30px;
   }

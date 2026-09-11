@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../public/icon-512.png" width="128" alt="Coffee logo" />
+  <img src="../assets/brand/icon-rounded.png" width="128" alt="Coffee logo" />
 </p>
 <h1 align="center">coffee · A coffee flavor universe</h1>
 <p align="center">Explore coffee flavors, origins and brewing methods, then record what you taste.</p>

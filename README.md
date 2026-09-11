@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/icon-512.png" width="128" alt="Coffee logo" />
+  <img src="assets/brand/icon-rounded.png" width="128" alt="Coffee logo" />
 </p>
 <h1 align="center">coffee · 咖啡风味宇宙</h1>
 <p align="center">探索咖啡风味、产地与冲煮方法，记录自己的品鉴体验。</p>
