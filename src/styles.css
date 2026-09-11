@@ -5552,14 +5552,6 @@ input[type="search"]::-webkit-search-cancel-button {
     max-width: 95px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .exhibition-copy {
-    animation: none;
-  }
-  .path-progress > span {
-    transition: none;
-  }
-}
 
 /* Clip transformed orbit boxes without affecting page width. */
 .wheel-canvas-wrap {
