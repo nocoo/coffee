@@ -124,6 +124,13 @@ bytes. Check fonts, both icons, manifest, OpenGraph metadata and image, favicon,
 robots. Inspect security headers from [`public/_headers`](../public/_headers); Vite preview
 does not apply Cloudflare's `_headers` rules.
 
+Verify that HTML includes `no-transform` and that a real browser receives no injected
+analytics script. Cloudflare's zone-level automatic Web Analytics injection can otherwise
+produce a CSP error even when curl's HTML is unchanged. The response directive is the
+[documented opt-out](https://developers.cloudflare.com/web-analytics/get-started/#sites-proxied-through-cloudflare)
+for this application; it does not require changing a shared zone setting. Also verify
+`/oss-licenses.txt`, which Vite generates from the dependencies actually bundled.
+
 In a real browser verify language and theme persistence, a 3D flavor selection, calculator
 output, journal export, exhibition autoplay and the muted → enabled → muted sound flow.
 Look for console errors, failed chunks or CSP violations. Test 390px-class mobile, normal

@@ -108,6 +108,12 @@ Blob downloads; it forbids remote scripts, plugins, framing and arbitrary form t
 Hashed assets use immutable caching. Font filenames are currently stable: rename them
 when updating font bytes because their cache headers are immutable too.
 
+HTML uses `Cache-Control: public, max-age=0, must-revalidate, no-transform`. The `no-transform`
+directive prevents automatic Cloudflare analytics-beacon injection, keeping this app's
+self-only script policy and local-data behavior intact. Asset/font rules replace that
+header with immutable caching. Vite emits the actual bundled dependency licenses as
+`oss-licenses.txt`, accessible from Sources & credits.
+
 ## Checks
 
 Vitest verifies graph and locale integrity, arithmetic, recommendation constraints,
