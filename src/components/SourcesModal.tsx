@@ -35,6 +35,16 @@ export function SourcesModal({ onClose }: { onClose: () => void }) {
         {ui.researchDoc}
         <ArrowUpRight size={16} />
       </a>
+      <p className="gentle-note">
+        <a className="text-link" href="/oss-licenses.txt" target="_blank" rel="noreferrer">
+          {l({ zh: '开源组件许可证', en: 'Open-source component licenses' })}
+          <ArrowUpRight size={14} />
+        </a>
+        {' · '}
+        <a href="/react-three-fiber-license.txt" target="_blank" rel="noreferrer">
+          React Three Fiber · MIT
+        </a>
+      </p>
     </Modal>
   );
 }

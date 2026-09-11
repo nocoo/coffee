@@ -20,6 +20,13 @@ The `bun.lock` file records the complete dependency set; individual packages ret
 own licenses, including development tools. There are no downloaded photographs, licensed
 music files or remotely hosted fonts in the product.
 
+Each production build also emits [`/oss-licenses.txt`](https://coffee.hexly.ai/oss-licenses.txt)
+through Vite's dependency-license collector. It includes the full license texts and copyright
+notices found in the packages actually bundled, and is linked from the in-app Sources & credits panel.
+The Fiber npm package omits its full license file, so its [v9.7.0 upstream MIT notice](https://raw.githubusercontent.com/pmndrs/react-three-fiber/v9.7.0/LICENSE)
+is additionally preserved at [`/react-three-fiber-license.txt`](public/react-three-fiber-license.txt)
+and linked from the same panel.
+
 WCR, SCA, CQI, ICO, the national agencies and manufacturers are factual references, not
 sponsors. We do not distribute the SCA flavor-wheel artwork, WCR definitions or intensity
 reference recipes, SCA standard PDFs, official assessment forms, manufacturer images,

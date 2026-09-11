@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   plugins: [react()],
   build: {
+    license: { fileName: 'oss-licenses.txt' },
     target: 'es2022',
     rollupOptions: {
       output: {
