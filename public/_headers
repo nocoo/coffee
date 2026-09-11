@@ -11,3 +11,7 @@
 /fonts/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+/api/live
+  ! Cache-Control
+  Cache-Control: no-store
+  Content-Type: application/json; charset=utf-8

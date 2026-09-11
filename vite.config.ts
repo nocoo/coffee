@@ -1,8 +1,21 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import { version } from './package.json';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'service-health',
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'api/live',
+          source: JSON.stringify({ status: 'ok', component: 'coffee', version }),
+        });
+      },
+    },
+  ],
   build: {
     license: { fileName: 'oss-licenses.txt' },
     target: 'es2022',
