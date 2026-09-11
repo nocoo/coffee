@@ -1,8 +1,14 @@
-# coffee · 咖啡风味宇宙
+<p align="center">
+  <img src="public/icon-512.png" width="128" alt="Coffee logo" />
+</p>
+<h1 align="center">coffee · 咖啡风味宇宙</h1>
+<p align="center">探索咖啡风味、产地与冲煮方法，记录自己的品鉴体验。</p>
+<p align="center">
+  <a href="https://coffee.hexly.ai">打开站点</a> ·
+  <a href="docs/README.en.md">English</a>
+</p>
 
 一杯咖啡，无限好奇。一个从感官入门到专业练习的中英文交互空间，也是适合咖啡店大屏的慢速风味展览。
-
-**[打开 coffee.hexly.ai](https://coffee.hexly.ai)** · [研究与版权](docs/research-sources.md) · [部署说明](docs/deployment.md)
 
 ![coffee · A little curiosity. A world of flavor.](public/og.png)
 
@@ -75,6 +81,18 @@ docs/              架构、内容模型、资料出处和部署
 ```
 
 详见 [架构](docs/architecture.md) 与 [内容模型](docs/content-model.md)。
+
+## 技术栈
+
+| 技术 | 用途 |
+| --- | --- |
+| TypeScript / React | 双语界面、内容模型与交互 |
+| Three.js / React Three Fiber | 可点选的 3D 风味轮，配套 SVG 轻量视图 |
+| Vite / Bun | 开发、依赖管理与静态构建 |
+| History API / localStorage | 页面导航、偏好、学习进度与本地品鉴手记 |
+| Web Audio API | 需要主动开启的合成环境音 |
+| Cloudflare Workers Static Assets | 静态站点分发与自定义域名 |
+| Vitest / Playwright | 数据、计算与存储测试，桌面和手机浏览器场景 |
 
 ## 部署
 
