@@ -19,6 +19,13 @@ Its asset directory is `./dist` and `not_found_handling` is `single-page-applica
 There is no `main` entry because Workers Static Assets supports a purely static deployment.
 There is no empty handler, database, R2 bucket, secret, runtime API or custom binding.
 
+The production build emits `/api/live` as JSON with `status: "ok"`,
+`component: "coffee"`, and the version from `package.json`. The asset's headers
+set its JSON content type and `Cache-Control: no-store`. This public endpoint
+checks the deployed static site and is monitored by `https://status.hexly.ai`.
+Use Wrangler or production to verify these headers; Vite preview does not apply
+Cloudflare's `_headers` rules.
+
 The custom-domain route is:
 
 ```json
@@ -112,6 +119,7 @@ tokens, publish previews or automatically deploy on pull requests.
 
 ```sh
 curl --fail --silent --show-error --dump-header - https://coffee.hexly.ai/ --output /dev/null
+curl --fail --silent --show-error --dump-header - https://coffee.hexly.ai/api/live
 curl --fail --silent --show-error --head https://coffee.hexly.ai/og.png
 curl --fail --silent --show-error --head https://coffee.hexly.ai/icon-512.png
 curl --fail --silent --show-error --head https://coffee.hexly.ai/manifest.webmanifest
