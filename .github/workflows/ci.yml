@@ -14,7 +14,7 @@ jobs:
     uses: nocoo/base-ci/.github/workflows/quality.yml@ab52d72877d386c9a8fd224e9ac868e88be90539
     with:
       runtime-version: "1.4.0"
-      node-version: "24.14.0"
+      node-version: "24.20.0"
       install-policy: "project"
       build: true
       build-command: "bun run build && bunx wrangler deploy --dry-run"
@@ -30,7 +30,7 @@ jobs:
     with:
       runtime: "bun"
       runtime-version: "1.4.0"
-      node-version: "24.14.0"
+      node-version: "24.20.0"
       install-policy: "project"
       browser: "chromium"
       timeout-minutes: 15
