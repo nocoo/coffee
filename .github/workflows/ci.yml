@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   quality:
-    uses: nocoo/base-ci/.github/workflows/quality.yml@ab52d72877d386c9a8fd224e9ac868e88be90539
+    uses: nocoo/base-ci/.github/workflows/quality.yml@ad43150de3a2be2fa464b5cd2f921dc4fa9f8f0f
     with:
       runtime-version: "1.4.0"
       node-version: "24.20.0"
@@ -21,12 +21,11 @@ jobs:
       test-command: "bun run test"
       lint-command: "bun run lint"
       typecheck-command: "bun run typecheck"
-    secrets: inherit
 
   browser-e2e:
     name: "L3 Browser E2E"
     needs: quality
-    uses: nocoo/base-ci/.github/workflows/test-job.yml@ab52d72877d386c9a8fd224e9ac868e88be90539
+    uses: nocoo/base-ci/.github/workflows/test-job.yml@ad43150de3a2be2fa464b5cd2f921dc4fa9f8f0f
     with:
       runtime: "bun"
       runtime-version: "1.4.0"
