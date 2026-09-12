@@ -21,8 +21,23 @@ jobs:
       test-command: "bun run test"
       lint-command: "bun run lint"
       typecheck-command: "bun run typecheck"
-      l3: true
-      l3-command: "bun run test:e2e"
-      l3-browser: "chromium"
-      env-json: '{"PLAYWRIGHT_BROWSERS_PATH": ".work/browsers"}'
     secrets: inherit
+
+  browser-e2e:
+    name: "L3 Browser E2E"
+    needs: quality
+    uses: nocoo/base-ci/.github/workflows/test-job.yml@ab52d72877d386c9a8fd224e9ac868e88be90539
+    with:
+      runtime: "bun"
+      runtime-version: "1.4.0"
+      node-version: "24.14.0"
+      install-policy: "project"
+      browser: "chromium"
+      timeout-minutes: 15
+      pre-command: "bun run build"
+      command: "bun run test:e2e"
+      env-json: '{"PLAYWRIGHT_BROWSERS_PATH": ".work/browsers", "CI": "true"}'
+      artifact-name: "browser-failure-report"
+      artifact-path: |
+        playwright-report/
+        test-results/
