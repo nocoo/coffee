@@ -76,7 +76,6 @@ export const messages = {
     'AN ORIGINAL ATLAS · 8 FAMILIES · 96 ASSOCIATIONS',
   ),
   dragHint: b('拖动旋转 · 点击探索', 'DRAG TO ROTATE · CLICK TO EXPLORE'),
-  wheelLabel: b('可交互三维咖啡风味轮', 'Interactive 3D coffee flavor wheel'),
   flatWheelLabel: b('二维咖啡风味轮', '2D coffee flavor wheel'),
   zoomIn: b('放大风味轮', 'Zoom in'),
   zoomOut: b('缩小风味轮', 'Zoom out'),
@@ -126,7 +125,6 @@ export const messages = {
   processes: b('处理方式', 'Processing'),
   mapLabel: b('咖啡产区地图，点击标记查看详情', 'Coffee origin map; select a marker for details'),
   potentialNotes: b('值得寻找的联想', 'Associations to look for'),
-  exploreThis: b('探索这个产地', 'Explore this origin'),
   brewThis: b('为它做一杯', 'Brew a cup'),
   labEyebrow: b('一点精确，一点直觉', 'A LITTLE PRECISION. A LITTLE INTUITION.'),
   labTitle: b('下一杯，更合你意。', 'Make the next cup yours.'),
@@ -155,7 +153,6 @@ export const messages = {
   startingPoint: b('从这里开始，再用味道调整。', 'Start here, then adjust by taste.'),
   brewSteps: b('慢慢来，照着做。', 'Take it one step at a time.'),
   troubleshoot: b('如果这一杯不太对', 'If the cup is not quite right'),
-  recipeSaved: b('配方已带入手记。', 'Recipe added to your journal draft.'),
   recommendation: b('找到你的下一杯', 'Meet your next cup'),
   recommendationDescription: b(
     '告诉我们你想要的感觉，从产区、处理法到配方，找到一个探索起点。',
@@ -187,7 +184,6 @@ export const messages = {
   completed: b('已完成', 'Completed'),
   markComplete: b('完成这次练习', 'Mark practice complete'),
   undoComplete: b('重新练习', 'Practice again'),
-  readLesson: b('开始这节', 'Open lesson'),
   sensory: b('感官基础', 'Sensory foundations'),
   extraction: b('萃取与变量', 'Extraction & variables'),
   cupping: b('杯测与校准', 'Cupping & calibration'),
@@ -280,7 +276,6 @@ export const messages = {
     'Independent project · not affiliated with WCR, SCA or CQI',
   ),
   close: b('关闭', 'Close'),
-  back: b('返回', 'Back'),
   backHome: b('回到风味宇宙', 'Back to the universe'),
   notFoundTitle: b('这一颗星，还没被发现。', 'This little world is still uncharted.'),
   notFoundDescription: b(
@@ -292,7 +287,6 @@ export const messages = {
   footerLine: b('慢一点喝，多一点好奇。', 'Sip slowly. Stay curious.'),
   footerSub: b('为喜欢咖啡，也喜欢发现的你。', 'Made for a love of coffee and a little discovery.'),
   openSource: b('开放源代码', 'Open source'),
-  noData: b('未找到对应条目，显示完整索引。', 'That entry was not found. Showing the full index.'),
 };
 
 export type Messages = { [Key in keyof typeof messages]: string };
