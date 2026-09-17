@@ -69,14 +69,14 @@ Status: `enforced` | `planned` | `manual` | `N/A`.
 | Logic | L1 Vitest four metrics each ≥ 95% | planned | CI `bun run test` has no coverage thresholds in `vite.config.ts` |
 | API / schema | L2 real HTTP, 100% surface | N/A | no application API; `/api/live` is static JSON |
 | UI path | L3 Playwright desktop+mobile | enforced | CI job `browser-e2e` → `bun run test:e2e` |
-| Types / lint | G1 0 error, 0 warning | enforced | CI `bun run typecheck`, `bun run lint`; no pre-commit |
+| Types / lint | G1 0 error, 0 warning | planned | CI `bun run typecheck`. Lint is `biome check .` without `--error-on-warnings`; warnings do not fail. No husky |
 | Deps / secrets | G2 osv-scanner + gitleaks | enforced | base-ci `quality.yml` default `security: true` |
-| Test isolation | D1 per-run local state | planned | L3 defaults to local preview :4173; no persist-to/marker. Do not set `COFFEE_BASE_URL` (that targets a live host) |
+| Test isolation | D1 Playwright local preview; no SQLite | N/A (SQLite/`_test_marker`) | Stateless browser app. `playwright.config.ts`: default context, no `storageState`. `COFFEE_BASE_URL` skips local `webServer` — do not set it. No isolated browser user-data dir |
 | Bundler output | `bun run build` + wrangler dry-run | enforced | CI `build-command` |
 | Docs | numbered/architecture doc if behavior changed | manual | human review |
 | Release | version + changelog + Worker deploy | enforced | `.github/workflows/release.yml` after green Verify coffee |
 
-No local husky. CI is the gate. Hooks elsewhere must stay check-only; `--no-verify` is forbidden.
+No husky. Target (unmeasured): pre-commit G1+L1 on an index snapshot (`git checkout-index`) <30s; pre-push L2+G2 on stdin push refs <3min. Check-only; `--no-verify` forbidden.
 
 ## Resources / Isolation
 
@@ -85,7 +85,7 @@ No local husky. CI is the gate. Hooks elsewhere must stay check-only; `--no-veri
 | Dev | 5173 Vite | local static app; may bind `0.0.0.0` |
 | L3 | 4173 `bun run preview` | Playwright `webServer`; do not use production |
 
-E2E never touches prod data stores. Worker tests, if added, must use local Wrangler/Miniflare + per-run SQLite, never remote `-test`.
+E2E never touches prod data stores. Do not invent a SQLite database for this static app. Never deploy remote `-test` Workers.
 
 ## Operations / Release
 
