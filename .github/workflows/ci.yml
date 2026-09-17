@@ -4,35 +4,39 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: .work/browsers
-      CI: 'true'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: '1.4.0'
-      - run: bun install --frozen-lockfile
-      - run: bun run validate
-      - run: bunx wrangler deploy --dry-run
-      - run: bunx playwright install --with-deps chromium
-      - run: bun run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: browser-failure-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7
+  quality:
+    uses: nocoo/base-ci/.github/workflows/quality.yml@ad43150de3a2be2fa464b5cd2f921dc4fa9f8f0f
+    with:
+      runtime-version: "1.4.0"
+      node-version: "24.20.0"
+      install-policy: "project"
+      build: true
+      build-command: "bun run build && bunx wrangler deploy --dry-run"
+      test-command: "bun run test"
+      lint-command: "bun run lint"
+      typecheck-command: "bun run typecheck"
+
+  browser-e2e:
+    name: "L3 Browser E2E"
+    needs: quality
+    uses: nocoo/base-ci/.github/workflows/test-job.yml@ad43150de3a2be2fa464b5cd2f921dc4fa9f8f0f
+    with:
+      runtime: "bun"
+      runtime-version: "1.4.0"
+      node-version: "24.20.0"
+      install-policy: "project"
+      browser: "chromium"
+      timeout-minutes: 15
+      pre-command: "bun run build"
+      command: "bun run test:e2e"
+      env-json: '{"PLAYWRIGHT_BROWSERS_PATH": ".work/browsers", "CI": "true"}'
+      artifact-name: "browser-failure-report"
+      artifact-path: |
+        playwright-report/
+        test-results/
