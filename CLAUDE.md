@@ -71,7 +71,7 @@ Status: `enforced` | `planned` | `manual` | `N/A`.
 | UI path | L3 Playwright desktop+mobile | enforced | CI job `browser-e2e` → `bun run test:e2e` |
 | Types / lint | G1 0 error, 0 warning | planned | CI `bun run typecheck`. Lint is `biome check .` without `--error-on-warnings`; warnings do not fail. No husky |
 | Deps / secrets | G2 osv-scanner + gitleaks | enforced | base-ci `quality.yml` default `security: true` |
-| Test isolation | D1 Playwright local preview; no SQLite | N/A (SQLite/`_test_marker`) | Stateless browser app. `playwright.config.ts`: default context, no `storageState`. `COFFEE_BASE_URL` skips local `webServer` — do not set it. No isolated browser user-data dir |
+| Test isolation | D1 fresh browser state and a guarded local target | planned | Playwright creates isolated contexts; preview defaults to loopback :4173. `COFFEE_BASE_URL` can bypass the local server, and dev-mode server reuse lacks an ownership guard. SQLite/`_test_marker` are N/A because there is no database |
 | Bundler output | `bun run build` + wrangler dry-run | enforced | CI `build-command` |
 | Docs | numbered/architecture doc if behavior changed | manual | human review |
 | Release | version + changelog + Worker deploy | enforced | `.github/workflows/release.yml` after green Verify coffee |
