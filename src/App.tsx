@@ -45,6 +45,7 @@ export default function App() {
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const path = route.split('?')[0];
   const exhibition = path === '/display';
+  const hexlyLabel = l({ zh: '在 hexly.ai 查看 Coffee', en: 'Coffee on hexly.ai' });
   const navigation = [
     { to: '/', label: ui.universe },
     { to: '/origins', label: ui.origins },
@@ -90,6 +91,7 @@ export default function App() {
                 type="button"
                 className="icon-button search-trigger"
                 aria-label={ui.search}
+                title={ui.search}
                 onClick={() => setSearchOpen(true)}
               >
                 <Search size={19} />
@@ -101,12 +103,36 @@ export default function App() {
                 className="locale-button"
                 onClick={() => setSetting('locale', settings.locale === 'zh' ? 'en' : 'zh')}
                 aria-label={settings.locale === 'zh' ? 'Switch to English' : '切换为中文'}
+                title={settings.locale === 'zh' ? 'Switch to English' : '切换为中文'}
               >
                 <Globe2 size={15} />
                 <span>{settings.locale === 'zh' ? 'EN' : '中文'}</span>
               </button>
+              <a
+                href="https://hexly.ai/projects/coffee"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="icon-button"
+                title={hexlyLabel}
+                aria-label={`${hexlyLabel}${l({ zh: '（在新标签页打开）', en: ' (opens in a new tab)' })}`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m12 2 8.66 5v10L12 22l-8.66-5V7Z" />
+                  <path d="M12 2v20M3.34 7l17.32 10m0-10L3.34 17" />
+                </svg>
+              </a>
               <details className="settings-menu">
-                <summary aria-label={ui.settings}>
+                <summary aria-label={ui.settings} title={ui.settings}>
                   {settings.theme === 'espresso' ? (
                     <Moon size={18} />
                   ) : settings.theme === 'terroir' ? (
@@ -168,7 +194,7 @@ export default function App() {
                   </label>
                 </div>
               </details>
-              <AppLink to="/display" className="display-button" aria-label={ui.display}>
+              <AppLink to="/display" className="display-button" aria-label={ui.display} title={ui.display}>
                 <Monitor size={15} />
                 <span>{ui.display}</span>
                 <ArrowUpRight size={13} />
