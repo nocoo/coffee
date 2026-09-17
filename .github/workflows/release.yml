@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_run:
+    workflows: ["Verify coffee"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to deploy (e.g. v1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  deploy:
+    name: Deploy Worker
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
+    uses: nocoo/base-ci/.github/workflows/deploy-worker.yml@ad43150de3a2be2fa464b5cd2f921dc4fa9f8f0f
+    with:
+      expected-workflow-path: ".github/workflows/ci.yml"
+      expected-workflow-name: "Verify coffee"
+      source-run-id: ${{ github.event_name == 'workflow_run' && format('{0}', github.event.workflow_run.id) || '' }}
+      tag: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || '' }}
+      package-version-match: ${{ github.event_name != 'workflow_run' }}
+      runtime-version: "1.4.0"
+      node-version: "24.20.0"
+      install-policy: "project"
+      build-command: bun run build
+      wrangler-version: "4.131.0"
+      environment: production
+      concurrency-group: deploy-coffee-production
+      timeout-minutes: 15
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
