@@ -8,6 +8,8 @@
   <a href="../README.md">简体中文</a>
 </p>
 
+## What it does
+
 Coffee is a bilingual space for sensory learning and brewing practice, with a slow exhibition mode for a coffee shop display. It runs entirely in the browser; the content and calculations need no account, API key or server database.
 
 ![Coffee — A little curiosity. A world of flavor.](../public/og.png)
@@ -61,6 +63,8 @@ docs/              Architecture, content model, research and deployment
 
 See the [architecture](architecture.md) and [content model](content-model.md).
 
+See [deployment](deployment.md) for configuration, access requirements and rollback.
+
 ## Tests
 
 `bun run test` checks content integrity, recipe calculations, search, recommendations and storage behavior. To run browser tests for the first time:
@@ -93,18 +97,12 @@ Tests save notes only inside isolated browser contexts and do not write remote d
 | Cloudflare Workers Static Assets | Static delivery and the custom domain |
 | Vitest / Playwright | Data, calculation, storage and desktop/mobile browser checks |
 
-## Deployment
+## Documentation
 
-[wrangler.jsonc](../wrangler.jsonc) configures Cloudflare Workers Static Assets for **coffee.hexly.ai**. Wrangler v4 can publish the static directory directly, without an empty Worker script or additional backend.
+- [Architecture](architecture.md) and [content model](content-model.md).
+- [Deployment](deployment.md) and [research sources](research-sources.md).
 
-```sh
-bunx wrangler login
-bun run deploy
-```
-
-The Cloudflare account must be able to manage the configured account and the `hexly.ai` zone. The custom-domain route creates the domain binding, DNS and certificate. See [deployment](deployment.md) for commands, access requirements, checks and rollback. Keep OAuth files, tokens, `.env` and `.dev.vars` out of Git.
-
-## Sources and limits
+### Sources and limits
 
 Research draws on the WCR Sensory Lexicon and Varieties Catalog, SCA CVA and 102-2024, CQI, ICO, official origin organizations and coffee science papers. The application uses original Chinese and English explanations. [Research and attribution](research-sources.md) records access dates, citation scope and licensing.
 
