@@ -3,7 +3,7 @@
   "name": "coffee",
   "account_id": "d51a8fde361e4be31db17d8c56737c1f",
   "compatibility_date": "2026-09-11",
-  "workers_dev": true,
+  "workers_dev": false,
   "preview_urls": false,
   "assets": {
     "directory": "./dist",
