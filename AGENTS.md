@@ -44,7 +44,7 @@ Statuses: `enforced` | `planned` | `manual` | `N/A`.
 | Dimension | Required proof | Status | Evidence |
 |---|---|---|---|
 | L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned | CI `bun run test` has no coverage thresholds in `vite.config.ts`; CI `bun run typecheck`; lint is `biome check .` without `--error-on-warnings` so warnings do not fail; no husky installed |
-| L2 API | Real HTTP, 100% surface | N/A | no application API; `/api/live` is static JSON |
+| L2 API | Real HTTP, 100% surface | planned | Build emits `/api/live` JSON health asset `{status,component,version}` via `vite.config.ts` `service-health` plugin; no local HTTP L2 runner verifies this contract. Business CRUD remains N/A — no application API beyond the health asset |
 | L3 UI path | Playwright desktop+mobile | enforced | CI job `browser-e2e` → `bun run test:e2e` |
 | G2 security | osv-scanner + gitleaks | enforced | base-ci `quality.yml` default `security: true` |
 | D1 isolation | Fresh browser state and a guarded local target | planned | Playwright creates isolated contexts; preview defaults to loopback :4173. `COFFEE_BASE_URL` can bypass the local server, and dev-mode server reuse lacks an ownership guard. SQLite/`_test_marker` are N/A because there is no database |
