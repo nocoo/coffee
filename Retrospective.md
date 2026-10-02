@@ -8,3 +8,5 @@ Routing: narrative stays here. A project-specific rule that will recur may becom
 ## 2026-10-02 — Check the exact import before replacing it
 
 The Vitest upgrade reported a missing JSON import attribute in Vite configuration. A guarded replacement initially assumed a default import, but the source used a named version import; the assertion prevented an unintended edit. Read the exact source before constructing a replacement. Add the JSON attribute to the actual import and rerun the checks; never suppress the loader warning or describe checks on the unchanged file as repair validation.
+
+The first attribute-only fix still emitted a named-JSON-import warning. Review caught that exit0 had been mistaken for warning-free validation. JSON modules provide only a default export; use that default import with the JSON attribute and read packageJson.version. Inspect actual test/build diagnostics before asserting a warning is gone; a successful exit alone does not establish it.
