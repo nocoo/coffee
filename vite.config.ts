@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
-import { version } from './package.json';
+import packageJson from './package.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [
@@ -11,7 +11,11 @@ export default defineConfig({
         this.emitFile({
           type: 'asset',
           fileName: 'api/live',
-          source: JSON.stringify({ status: 'ok', component: 'coffee', version }),
+          source: JSON.stringify({
+            status: 'ok',
+            component: 'coffee',
+            version: packageJson.version,
+          }),
         });
       },
     },
