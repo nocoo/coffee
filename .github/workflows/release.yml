@@ -38,7 +38,7 @@ jobs:
       node-version: "24.20.0"
       install-policy: "project"
       build-command: bun run build
-      wrangler-version: "4.131.0"
+      wrangler-version: "4.139.0"
       environment: production
       concurrency-group: deploy-coffee-production
       timeout-minutes: 15
