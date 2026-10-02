@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
-import { version } from './package.json';
+import { version } from './package.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [
