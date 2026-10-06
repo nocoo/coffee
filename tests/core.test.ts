@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateRecipe, formatDuration, recommend } from '../src/lib/core';
+import { calculateRecipe, formatDuration, formatMass, recommend } from '../src/lib/core';
 import { searchContent, searchIndex } from '../src/lib/search';
 
 describe('recipe arithmetic', () => {
@@ -39,8 +39,24 @@ describe('recipe arithmetic', () => {
   });
   it('formats long cold brews and short espresso in the selected language', () => {
     expect(formatDuration(43200, 'en')).toBe('12 h');
+    expect(formatDuration(43200, 'zh')).toBe('12 小时');
     expect(formatDuration(180, 'zh')).toBe('3 分钟');
+    expect(formatDuration(180, 'en')).toBe('3 min');
     expect(formatDuration(30, 'en')).toBe('30 s');
+    expect(formatDuration(30, 'zh')).toBe('30 秒');
+  });
+  it('rejects impossible per-serving quantities even when the input amount is valid', () => {
+    for (const input of [
+      { amount: 1, basis: 'water', ratio: 30, servings: 1 },
+      { amount: 1001, basis: 'coffee', ratio: 1, servings: 1 },
+      { amount: 500, basis: 'coffee', ratio: 30, servings: 1 },
+    ] as const) {
+      expect(() => calculateRecipe(input)).toThrow('range');
+    }
+  });
+  it('formats recipe masses without unnecessary decimals or lost grouping', () => {
+    expect(formatMass(1234.56)).toBe('1,234.6');
+    expect(formatMass(15)).toBe('15');
   });
 });
 
@@ -72,6 +88,21 @@ describe('transparent recommendations', () => {
     expect(recommend({ ...preference, process: 'not-a-process' })).toEqual([]);
     expect(recommend({ ...preference, roast: 'invalid' })).toEqual([]);
     expect(recommend({ ...preference, body: 99 })).toEqual([]);
+  });
+  it('uses supported origin processes when preferences leave family and process open', () => {
+    const results = recommend({
+      ...preference,
+      family: 'any',
+      process: 'any',
+      acidity: 1,
+      body: 5,
+    });
+    expect(results).toHaveLength(3);
+    for (const result of results) {
+      expect(result.origin.processes).toContain(result.process.id);
+      expect(result.method.id).toBe('french-press');
+      expect(result.reasons.length).toBeGreaterThan(0);
+    }
   });
 });
 

@@ -21,15 +21,15 @@ Direction: [docs/architecture.md](docs/architecture.md). Frameworks must not rew
 
 ## Setup and commands
 
-TypeScript strict (`tsc -b`); Bun 1.4.0 (`packageManager`); Vite 8 + React 19 on Cloudflare Workers static assets; Biome lint; Vitest L1 (no coverage gate) plus Playwright L3; no database (browser localStorage). Layout: `src/{components,data,lib,pages}`, `tests/{*.test.ts,e2e}`, `docs/`, `public/`, `scripts/`. MVVM: keep viewmodels free of View/DOM imports; routes stay thin.
+TypeScript strict (`tsc -b`); Bun 1.4.0 (`packageManager`); Vite 8 + React 19 on Cloudflare Workers static assets; Biome lint; Vitest/V8 L1 with four 95% coverage floors plus Playwright L3; no database (browser localStorage). Layout: `src/{components,data,lib,pages}`, `tests/{*.test.ts,e2e}`, `docs/`, `public/`, `scripts/`. MVVM: keep viewmodels free of View/DOM imports; routes stay thin.
 
 ```bash
 bun install
 bun run dev                 # Vite, default http://localhost:5173
 bun run typecheck           # tsc -b
-bun run lint                # biome check .  (check-only)
+bun run lint                # biome check --error-on-warnings . (check-only)
 bun run build               # tsc -b && vite build && scripts/check-budgets.mjs
-bun run test                # vitest run (tests/**/*.test.ts)
+bun run test                # vitest run --coverage (tests/**/*.test.ts)
 bun run test:e2e            # playwright; local preview :4173 unless COFFEE_BASE_URL
 bun run deploy:check        # wrangler deploy --dry-run
 bun run deploy              # validate + dry-run + wrangler deploy (owner only)
@@ -43,7 +43,7 @@ Statuses: `enforced` | `planned` | `manual` | `N/A`.
 
 | Dimension | Required proof | Status | Evidence |
 |---|---|---|---|
-| L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned | CI `bun run test` has no coverage thresholds in `vite.config.ts`; CI `bun run typecheck`; lint is `biome check .` without `--error-on-warnings` so warnings do not fail; no husky installed |
+| L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned | `bun run test` enforces four 95% floors with Vitest/V8 over the existing runner-selected scope; CI invokes it, strict typecheck and warning-rejecting lint. Coverage include/exclude defaults and test selection remain unchanged. No husky or index-snapshot/commit-rejection gate is installed; full pre-commit enforcement remains planned |
 | L2 API | Real HTTP, 100% surface | planned | Build emits `/api/live` JSON health asset `{status,component,version}` via `vite.config.ts` `service-health` plugin; no local HTTP L2 runner verifies this contract. Business CRUD remains N/A — no application API beyond the health asset |
 | L3 UI path | Playwright desktop+mobile | enforced | CI job `browser-e2e` → `bun run test:e2e` |
 | G2 security | osv-scanner + gitleaks | enforced | base-ci `quality.yml` default `security: true` |
