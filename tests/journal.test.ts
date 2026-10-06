@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createNote,
   deleteNote,
+  downloadText,
+  MAX_NOTES,
   NOTES_KEY,
   noteMarkdown,
   readNotes,
@@ -64,11 +66,49 @@ describe('local tasting records', () => {
     expect(validNote({})).toBe(false);
   });
   it('preserves corrupt or future-version data without overwriting it', () => {
-    for (const raw of ['{broken', '{"version":2,"notes":[]}', '{"version":1,"notes":[{}]}']) {
+    for (const raw of [
+      '{broken',
+      'null',
+      '[]',
+      '{"notes":[]}',
+      '{"version":1}',
+      '{"version":2,"notes":[]}',
+      '{"version":1,"notes":[{}]}',
+    ]) {
       items.set(NOTES_KEY, raw);
       expect(readNotes(storage)).toMatchObject({ error: 'corrupt', raw });
       expect(() => saveNote(storage, createNote(draft))).toThrow('corrupt');
+      expect(() => deleteNote(storage, 'missing')).toThrow('corrupt');
       expect(items.get(NOTES_KEY)).toBe(raw);
+    }
+  });
+  it('rejects invalid drafts and records before writing storage', () => {
+    expect(() => createNote({ ...draft, title: '   ' })).toThrow('invalid-note');
+    const note = createNote(draft);
+    expect(() => saveNote(storage, { ...note, water: 0 })).toThrow('invalid-note');
+    expect(items.has(NOTES_KEY)).toBe(false);
+  });
+  it('preserves a full journal while allowing updates to an existing record', () => {
+    const note = createNote(draft);
+    const notes = Array.from({ length: MAX_NOTES }, (_, index) => ({
+      ...note,
+      id: `note-${index}`,
+    }));
+    const raw = JSON.stringify({ version: 1, notes });
+    items.set(NOTES_KEY, raw);
+    expect(() => saveNote(storage, note)).toThrow('full');
+    expect(items.get(NOTES_KEY)).toBe(raw);
+    expect(saveNote(storage, { ...note, id: 'note-0', notes: 'Updated' })).toHaveLength(MAX_NOTES);
+    expect(readNotes(storage).notes[0]?.notes).toBe('Updated');
+    for (const corrupt of [
+      [note, note],
+      [...notes, note],
+    ]) {
+      const damaged = JSON.stringify({ version: 1, notes: corrupt });
+      items.set(NOTES_KEY, damaged);
+      expect(readNotes(storage)).toMatchObject({ error: 'corrupt', raw: damaged });
+      expect(() => deleteNote(storage, note.id)).toThrow('corrupt');
+      expect(items.get(NOTES_KEY)).toBe(damaged);
     }
   });
   it('surfaces storage denial and quota errors instead of reporting a false save', () => {
@@ -103,5 +143,39 @@ describe('local tasting records', () => {
     expect(
       noteMarkdown(createNote({ ...draft, method: 'espresso', dose: 18, water: 36 }), 'en'),
     ).toContain('Beverage yield: 36 g');
+  });
+  it('exports unspecified origin and process without inventing flavor descriptors', () => {
+    const note = createNote({ ...draft, origin: '', process: '', flavors: [] });
+    expect(noteMarkdown(note, 'en')).toContain('Origin: Unspecified');
+    expect(noteMarkdown(note, 'en')).toContain('Process: Unspecified');
+    expect(noteMarkdown(note, 'en')).toContain('Flavor descriptors: —');
+    expect(noteMarkdown(note, 'zh')).toContain('产地: 未指定');
+  });
+  it('downloads the requested text and releases its temporary object URL asynchronously', async () => {
+    vi.useFakeTimers();
+    const anchor = { href: '', download: '', click: vi.fn() };
+    const createElement = vi.fn().mockReturnValue(anchor);
+    vi.stubGlobal('document', { createElement });
+    const createUrl = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:coffee-export');
+    const revokeUrl = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    try {
+      downloadText('Tasting notes', 'journal.txt');
+      expect(createElement).toHaveBeenCalledWith('a');
+      expect(anchor.href).toBe('blob:coffee-export');
+      expect(anchor.download).toBe('journal.txt');
+      expect(anchor.click).toHaveBeenCalledOnce();
+      const blob = createUrl.mock.calls[0]?.[0];
+      expect(blob).toBeInstanceOf(Blob);
+      if (!(blob instanceof Blob)) throw new Error('Expected a download Blob');
+      expect(blob.type).toBe('text/plain;charset=utf-8');
+      expect(await blob.text()).toBe('Tasting notes');
+      expect(revokeUrl).not.toHaveBeenCalled();
+      vi.runOnlyPendingTimers();
+      expect(revokeUrl).toHaveBeenCalledWith('blob:coffee-export');
+    } finally {
+      vi.useRealTimers();
+      vi.restoreAllMocks();
+      vi.unstubAllGlobals();
+    }
   });
 });
