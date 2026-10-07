@@ -4,7 +4,6 @@ export const b = (zh: string, en: string): Localized => ({ zh, en });
 
 export type FamilyId = 'fruit' | 'floral' | 'sweet' | 'nut' | 'spice' | 'roast' | 'green' | 'earth';
 export type Theme = 'daylight' | 'espresso' | 'terroir';
-export type Page = 'universe' | 'origins' | 'lab' | 'learn' | 'journal';
 export type SourceId =
   | 'wcr-lexicon'
   | 'wcr-varieties'
