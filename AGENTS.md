@@ -41,25 +41,25 @@ bun run deploy              # validate + dry-run + wrangler deploy (owner only)
 Required L1 bar: statements/branches/functions/lines each ≥ 95% with no `.skip`/`.only`, strict types and check-only lint/format with zero errors/warnings, installed hooks and failure rejection.
 Statuses: `enforced` | `planned` | `manual` | `N/A`.
 
-| Dimension | Required proof | Status | Evidence |
-|---|---|---|---|
-| L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned | `bun run test` enforces four 95% floors with Vitest/V8 over the existing runner-selected scope; CI invokes it, strict typecheck and warning-rejecting lint. Coverage include/exclude defaults and test selection remain unchanged. No husky or index-snapshot/commit-rejection gate is installed; full pre-commit enforcement remains planned |
-| L2 API | Real HTTP, 100% surface | planned | Build emits `/api/live` JSON health asset `{status,component,version}` via `vite.config.ts` `service-health` plugin; no local HTTP L2 runner verifies this contract. Business CRUD remains N/A — no application API beyond the health asset |
-| L3 UI path | Playwright desktop+mobile | enforced | CI job `browser-e2e` → `bun run test:e2e` |
-| G2 security | osv-scanner + gitleaks | enforced | base-ci `quality.yml` default `security: true` |
-| D1 isolation | Fresh browser state and a guarded local target | planned | Playwright creates isolated contexts; preview defaults to loopback :4173. `COFFEE_BASE_URL` can bypass the local server, and dev-mode server reuse lacks an ownership guard. SQLite/`_test_marker` are N/A because there is no database |
-| Build | `bun run build` + wrangler dry-run | enforced | CI `build-command` |
-| Docs | numbered/architecture doc if behavior changed | manual | human review |
-| Release | version + changelog + Worker deploy | enforced | `.github/workflows/release.yml` after green Verify coffee |
+| Dimension             | Required proof                                                                                              | Status   | Evidence                                                                                                                                                                                                                                                                                                                                      |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned  | `bun run test` enforces four 95% floors with Vitest/V8 over the existing runner-selected scope; CI invokes it, strict typecheck and warning-rejecting lint. Coverage include/exclude defaults and test selection remain unchanged. No husky or index-snapshot/commit-rejection gate is installed; full pre-commit enforcement remains planned |
+| L2 API                | Real HTTP, 100% surface                                                                                     | planned  | Build emits `/api/live` JSON health asset `{status,component,version}` via `vite.config.ts` `service-health` plugin; no local HTTP L2 runner verifies this contract. Business CRUD remains N/A — no application API beyond the health asset                                                                                                   |
+| L3 UI path            | Playwright desktop+mobile                                                                                   | enforced | CI job `browser-e2e` → `bun run test:e2e`                                                                                                                                                                                                                                                                                                     |
+| G2 security           | osv-scanner + gitleaks                                                                                      | enforced | base-ci `quality.yml` default `security: true`                                                                                                                                                                                                                                                                                                |
+| D1 isolation          | Fresh browser state and a guarded local target                                                              | planned  | Playwright creates isolated contexts; preview defaults to loopback :4173. `COFFEE_BASE_URL` can bypass the local server, and dev-mode server reuse lacks an ownership guard. SQLite/`_test_marker` are N/A because there is no database                                                                                                       |
+| Build                 | `bun run build` + wrangler dry-run                                                                          | enforced | CI `build-command`                                                                                                                                                                                                                                                                                                                            |
+| Docs                  | numbered/architecture doc if behavior changed                                                               | manual   | human review                                                                                                                                                                                                                                                                                                                                  |
+| Release               | version + changelog + Worker deploy                                                                         | enforced | `.github/workflows/release.yml` after green Verify coffee                                                                                                                                                                                                                                                                                     |
 
 No husky. Target (unmeasured): pre-commit unified L1 on an index snapshot (`git checkout-index`) <30s; pre-push L2+G2 on stdin push refs <3min. Check-only; `--no-verify` forbidden.
 
 ## Resources and isolation
 
-| Purpose | Port / resource | Isolation |
-|---|---|---|
-| Dev | 5173 Vite | local static app; may bind `0.0.0.0` |
-| L3 | 4173 `bun run preview` | Playwright `webServer`; do not use production |
+| Purpose | Port / resource        | Isolation                                     |
+| ------- | ---------------------- | --------------------------------------------- |
+| Dev     | 5173 Vite              | local static app; may bind `0.0.0.0`          |
+| L3      | 4173 `bun run preview` | Playwright `webServer`; do not use production |
 
 E2E never touches prod data stores. Do not invent a SQLite database for this static app. Never deploy remote `-test` Workers.
 
@@ -72,11 +72,10 @@ E2E never touches prod data stores. Do not invent a SQLite database for this sta
 
 ## Retrospective
 
-| Kind | Where |
-|---|---|
-| Accident narrative | [Retrospective.md](Retrospective.md) |
-| Project-specific rule that will recur | one line here (cap ~10) |
-| Cross-project lesson | nmem / global `AGENTS.md` / `rules/` |
-| Deterministically checkable rule | hook or test, not prose |
-
+| Kind                                  | Where                                |
+| ------------------------------------- | ------------------------------------ |
+| Accident narrative                    | [Retrospective.md](Retrospective.md) |
+| Project-specific rule that will recur | one line here (cap ~10)              |
+| Cross-project lesson                  | nmem / global `AGENTS.md` / `rules/` |
+| Deterministically checkable rule      | hook or test, not prose              |
 - Do not point Playwright at production via `COFFEE_BASE_URL` during local or CI L3.

@@ -101,15 +101,15 @@ COFFEE_BASE_URL=https://coffee.hexly.ai bun run test:e2e
 
 ## 技术栈
 
-| 技术 | 用途 |
-| --- | --- |
-| TypeScript / React | 双语界面、内容模型与交互 |
-| Three.js / React Three Fiber | 可点选的 3D 风味轮，配套 SVG 轻量视图 |
-| Vite / Bun | 开发、依赖管理与静态构建 |
-| History API / localStorage | 页面导航、偏好、学习进度与本地品鉴手记 |
-| Web Audio API | 需要主动开启的合成环境音 |
-| Cloudflare Workers Static Assets | 静态站点分发与自定义域名 |
-| Vitest / Playwright | 数据、计算与存储测试，桌面和手机浏览器场景 |
+| 技术                             | 用途                                       |
+| -------------------------------- | ------------------------------------------ |
+| TypeScript / React               | 双语界面、内容模型与交互                   |
+| Three.js / React Three Fiber     | 可点选的 3D 风味轮，配套 SVG 轻量视图      |
+| Vite / Bun                       | 开发、依赖管理与静态构建                   |
+| History API / localStorage       | 页面导航、偏好、学习进度与本地品鉴手记     |
+| Web Audio API                    | 需要主动开启的合成环境音                   |
+| Cloudflare Workers Static Assets | 静态站点分发与自定义域名                   |
+| Vitest / Playwright              | 数据、计算与存储测试，桌面和手机浏览器场景 |
 
 ## 文档
 
