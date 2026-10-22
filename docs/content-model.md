@@ -6,20 +6,20 @@ a translation fallback. Missing English never silently displays Chinese, or vice
 
 ## Collections
 
-| Collection | Count | Required information |
-| --- | ---: | --- |
-| Families | 8 | Stable ID, bilingual name/subtitle/description, original color and symbol |
-| Flavor groups | 24 | Family ID and bilingual name/description |
-| Flavors | 96 | Family/group, name, description, everyday reference, distinction, 3 related IDs, sources |
-| Origins | 23 | Name, illustrative regions/elevation, map coordinate, species/varieties, processes, flavor associations, context, sources |
-| Methods | 10 | Category, input-water or beverage-yield ratio, dose, ranges, grind, ≥4 steps, tip, caution, sources |
-| Varieties / species groups | 15 | Name, species, contextual agronomic description, sources |
-| Processes | 7 | Name, process description, possible effect, sources |
-| Roast categories | 4 | Name, description, adjustment tip |
-| Knowledge articles | 30 | Sensory/extraction/cupping/defects category, summary, body, practical exercise, sources |
-| Learning paths | 2 | Audience, description, duration, 7 ordered lesson IDs and matching exercises |
-| Quiz | 6 | Question, options, correct index and an explanation, all bilingual |
-| Source registry | 20 | Stable key, original organization/publication name, HTTPS URL, bilingual citation scope |
+| Collection                 | Count | Required information                                                                                                      |
+| -------------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------- |
+| Families                   |     8 | Stable ID, bilingual name/subtitle/description, original color and symbol                                                 |
+| Flavor groups              |    24 | Family ID and bilingual name/description                                                                                  |
+| Flavors                    |    96 | Family/group, name, description, everyday reference, distinction, 3 related IDs, sources                                  |
+| Origins                    |    23 | Name, illustrative regions/elevation, map coordinate, species/varieties, processes, flavor associations, context, sources |
+| Methods                    |    10 | Category, input-water or beverage-yield ratio, dose, ranges, grind, ≥4 steps, tip, caution, sources                       |
+| Varieties / species groups |    15 | Name, species, contextual agronomic description, sources                                                                  |
+| Processes                  |     7 | Name, process description, possible effect, sources                                                                       |
+| Roast categories           |     4 | Name, description, adjustment tip                                                                                         |
+| Knowledge articles         |    30 | Sensory/extraction/cupping/defects category, summary, body, practical exercise, sources                                   |
+| Learning paths             |     2 | Audience, description, duration, 7 ordered lesson IDs and matching exercises                                              |
+| Quiz                       |     6 | Question, options, correct index and an explanation, all bilingual                                                        |
+| Source registry            |    20 | Stable key, original organization/publication name, HTTPS URL, bilingual citation scope                                   |
 
 The flavor hierarchy is an original educational arrangement, not an implementation of
 the WCR's 110 attributes or a reproduction of the SCA wheel. Families have different numbers

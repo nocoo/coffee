@@ -87,15 +87,15 @@ Tests save notes only inside isolated browser contexts and do not write remote d
 
 ## Stack
 
-| Technology | Role |
-| --- | --- |
-| TypeScript / React | Bilingual interface, content model and interaction |
-| Three.js / React Three Fiber | Selectable 3D flavor wheel, with a separate lightweight SVG view |
-| Vite / Bun | Development, dependency management and static builds |
-| History API / localStorage | Navigation, preferences, learning progress and local tasting notes |
-| Web Audio API | Opt-in synthesized ambience |
-| Cloudflare Workers Static Assets | Static delivery and the custom domain |
-| Vitest / Playwright | Data, calculation, storage and desktop/mobile browser checks |
+| Technology                       | Role                                                               |
+| -------------------------------- | ------------------------------------------------------------------ |
+| TypeScript / React               | Bilingual interface, content model and interaction                 |
+| Three.js / React Three Fiber     | Selectable 3D flavor wheel, with a separate lightweight SVG view   |
+| Vite / Bun                       | Development, dependency management and static builds               |
+| History API / localStorage       | Navigation, preferences, learning progress and local tasting notes |
+| Web Audio API                    | Opt-in synthesized ambience                                        |
+| Cloudflare Workers Static Assets | Static delivery and the custom domain                              |
+| Vitest / Playwright              | Data, calculation, storage and desktop/mobile browser checks       |
 
 ## Documentation
 
