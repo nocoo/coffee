@@ -35,7 +35,7 @@ jobs:
       tag: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || '' }}
       package-version-match: ${{ github.event_name != 'workflow_run' }}
       runtime-version: "1.4.0"
-      node-version: "24.20.0"
+      node-version: "24.22.1"
       install-policy: "project"
       build-command: bun run build
       environment: production
