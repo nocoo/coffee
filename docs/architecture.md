@@ -54,6 +54,7 @@ does not pretend that a canvas alone provides accessible semantics.
 `CoffeeProvider` uses the native History API, validated local preferences and ordinary React
 state. There is no routing or state-management dependency. Normal links retain modifier-click
 and open-in-new-tab behavior. Forward/back navigation restores the selected route.
+
 - `coffee.preferences.v1`: locale, theme, contrast, reduced motion, lightweight graphics,
   favorite flavor IDs and completed article IDs. Unknown IDs are discarded; malformed values
   fall back to defaults. Language changes replace the active `lang` parameter as well as

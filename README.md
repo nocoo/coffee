@@ -56,8 +56,6 @@ bun run deploy:check
 构建还会检查 JavaScript、Three 引擎、CSS 和字体资源预算。
 Vite 的 Three 单块 500 kB 提示仍保留；引擎是按需加载的，实际 gzip 体积另有 250 KiB 硬预算。
 
-
-
 ### 项目结构
 
 ```text
@@ -78,8 +76,6 @@ docs/              架构、内容模型、资料出处和部署
 ## 测试
 
 `bun run test` 检查内容完整性、配方计算、搜索、推荐与存储行为。首次运行浏览器测试：
-
-
 
 ```sh
 PLAYWRIGHT_BROWSERS_PATH=.work/browsers bunx playwright install chromium
