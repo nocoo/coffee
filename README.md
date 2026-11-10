@@ -35,7 +35,7 @@ WebGL 不可用、节省流量或低性能设备可使用二维视图；手机�
 
 ## 开发
 
-使用 Bun 1.4+ 与现代 Node.js（资源生成和 Playwright 工具使用 Node；CI 使用 Node 24）。
+使用 Bun 1.4+ 与现代 Node.js（资源生成和 Playwright 工具使用 Node；CI 使用 Node 26 LTS）。
 
 ```sh
 bun install
