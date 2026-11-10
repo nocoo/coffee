@@ -1,3 +1,5 @@
+# CI slot standard v1 (nocoo/base-ci docs/slots.md): impl S1, S2, S3, G1, G2, B1, L1, L3, Z1 via quality.yml;
+# na L1.5, L2, P1 in slot-status. nocoo/base-ci v2026.12: top-level slot jobs, L3 browsers/artifacts.
 name: Verify coffee
 
 on:
@@ -11,32 +13,40 @@ permissions:
 
 jobs:
   quality:
-    uses: nocoo/base-ci/.github/workflows/quality.yml@633a5545fcfec91b688840650d4edf3e9cc1abbd # v2026.10
+    uses: nocoo/base-ci/.github/workflows/quality.yml@1ea10ecab22b72512399485391603fe03a161016 # v2026.12
     with:
       runtime-version: "1.4.0"
       node-version: "26.12.1"
-      install-policy: "project"
+      install-policy: project
+      coverage-path: coverage
+      test-command: bun run test
+      lint-command: bun run lint
+      typecheck-command: bun run typecheck
       build: true
       build-command: "bun run build && bunx wrangler deploy --dry-run"
-      test-command: "bun run test"
-      lint-command: "bun run lint"
-      typecheck-command: "bun run typecheck"
-
-  browser-e2e:
-    name: "L3 Browser E2E"
-    needs: quality
-    uses: nocoo/base-ci/.github/workflows/test-job.yml@633a5545fcfec91b688840650d4edf3e9cc1abbd # v2026.10
-    with:
-      runtime: "bun"
-      runtime-version: "1.4.0"
-      node-version: "26.12.1"
-      install-policy: "project"
-      browser: "chromium"
-      timeout-minutes: 15
-      pre-command: "bun run build"
-      command: "bun run test:e2e"
-      env-json: '{"PLAYWRIGHT_BROWSERS_PATH": ".work/browsers", "CI": "true"}'
-      artifact-name: "browser-failure-report"
-      artifact-path: |
+      workflow-lint: true
+      workflow-lint-required-workflow: nocoo/base-ci/.github/workflows/deploy-worker.yml
+      workflow-lint-yamllint: true
+      l3: true
+      l3-browsers: chromium
+      l3-prepare-command: bun run build
+      l3-command: bun run test:e2e
+      l3-artifact-name: browser-failure-report
+      l3-artifact-path: |
         playwright-report/
         test-results/
+      l3-artifact-retention-days: 14
+      env-json: '{"PLAYWRIGHT_BROWSERS_PATH": ".work/browsers", "CI": "true"}'
+      slot-status: >-
+        {"S1": {"status": "impl"},
+        "S2": {"status": "impl"},
+        "S3": {"status": "impl"},
+        "G1": {"status": "impl"},
+        "G2": {"status": "impl"},
+        "B1": {"status": "impl"},
+        "L1": {"status": "impl"},
+        "L1.5": {"status": "na", "reason": "无 @cloudflare/vitest-pool-workers / miniflare Worker 运行时测试套件；Worker 仅托管静态资源"},
+        "L2": {"status": "na", "reason": "无对外 HTTP API E2E；/api/live 为构建产物静态 JSON，非运行时 API"},
+        "L3": {"status": "impl"},
+        "P1": {"status": "na", "reason": "package.json 为 private，不发布 npm 包"},
+        "Z1": {"status": "impl"}}
