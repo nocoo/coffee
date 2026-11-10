@@ -31,7 +31,7 @@ Journal records stay in this browser on this device. Export a backup when needed
 
 ## Development
 
-Use Bun 1.4 or newer and a modern Node.js runtime. Asset generation and Playwright tooling use Node; CI uses Node 24.
+Use Bun 1.4 or newer and a modern Node.js runtime. Asset generation and Playwright tooling use Node; CI uses Node 26 LTS.
 
 ```sh
 bun install
