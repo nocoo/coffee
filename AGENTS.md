@@ -37,22 +37,24 @@ bun run deploy              # validate + dry-run + wrangler deploy (owner only)
 
 ## Testing and quality contract
 
-6DQ keeps its name with unified L1, L2/L3, G2 and D1; the owner merged former G1 into L1 on 2026-09-21.
-Required L1 bar: statements/branches/functions/lines each ≥ 95% with no `.skip`/`.only`, strict types and check-only lint/format with zero errors/warnings, installed hooks and failure rejection.
-Statuses: `enforced` | `planned` | `manual` | `N/A`.
+Quality follows System1 v1.3.0 Native Mode (`nocoo/base-ci v2026.15`) in `.github/workflows/quality-slots.yml` and `.github/workflows/ci.yml` (`Verify coffee`). Statuses: `enforced` | `planned` | `manual` | `N/A`.
 
-| Dimension             | Required proof                                                                                              | Status   | Evidence                                                                                                                                                                                                                                                                                                                                      |
-| --------------------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| L1 pre-commit quality | Four coverage metrics ≥ 95%, no `.skip`/`.only`, strict types and check-only lint with zero errors/warnings | planned  | `bun run test` enforces four 95% floors with Vitest/V8 over the existing runner-selected scope; CI invokes it, strict typecheck and warning-rejecting lint. Coverage include/exclude defaults and test selection remain unchanged. No husky or index-snapshot/commit-rejection gate is installed; full pre-commit enforcement remains planned |
-| L2 API                | Real HTTP, 100% surface                                                                                     | planned  | Build emits `/api/live` JSON health asset `{status,component,version}` via `vite.config.ts` `service-health` plugin; no local HTTP L2 runner verifies this contract. Business CRUD remains N/A — no application API beyond the health asset                                                                                                   |
-| L3 UI path            | Playwright desktop+mobile                                                                                   | enforced | CI job `browser-e2e` → `bun run test:e2e`                                                                                                                                                                                                                                                                                                     |
-| G2 security           | osv-scanner + gitleaks                                                                                      | enforced | base-ci `quality.yml` default `security: true`                                                                                                                                                                                                                                                                                                |
-| D1 isolation          | Fresh browser state and a guarded local target                                                              | planned  | Playwright creates isolated contexts; preview defaults to loopback :4173. `COFFEE_BASE_URL` can bypass the local server, and dev-mode server reuse lacks an ownership guard. SQLite/`_test_marker` are N/A because there is no database                                                                                                       |
-| Build                 | `bun run build` + wrangler dry-run                                                                          | enforced | CI `build-command`                                                                                                                                                                                                                                                                                                                            |
-| Docs                  | numbered/architecture doc if behavior changed                                                               | manual   | human review                                                                                                                                                                                                                                                                                                                                  |
-| Release               | version + changelog + Worker deploy                                                                         | enforced | `.github/workflows/release.yml` after green Verify coffee                                                                                                                                                                                                                                                                                     |
+| Slot              | Status   | Evidence                                                |
+| ----------------- | -------- | ------------------------------------------------------- |
+| `S1` Types        | enforced | `bun run typecheck` in CI                               |
+| `S2` Lint         | enforced | `bun run lint` in CI                                    |
+| `S3` Workflow     | enforced | SHA-pinned workflow action check in CI                  |
+| `G1` Secrets      | enforced | `gitleaks` scan in CI                                   |
+| `G2` Dependencies | enforced | `osv-scanner` scan (`bun.lock`) in CI                   |
+| `B1` Build        | enforced | `bun run build && bunx wrangler deploy --dry-run` in CI |
+| `L1` Unit         | enforced | `bun run test` (Vitest/V8 95% floors) in CI             |
+| `L2` Runtime      | N/A      | Static site; `/api/live` emitted as static JSON asset   |
+| `L3` Integration  | N/A      | Static site without application API                     |
+| `L4` E2E          | enforced | `bun run test:e2e` (Playwright Chromium) in CI          |
+| `P1` Package      | N/A      | Deployed as Cloudflare Worker, not an npm package       |
+| `Z1` Gate         | enforced | `quality / Z1: Gate` required status check on `main`    |
 
-No husky. Target (unmeasured): pre-commit unified L1 on an index snapshot (`git checkout-index`) <30s; pre-push L2+G2 on stdin push refs <3min. Check-only; `--no-verify` forbidden.
+Docs remain `manual` review; release runs `.github/workflows/release.yml` (`deploy-worker.yml`) after green `Verify coffee`. No husky hooks installed; `--no-verify` forbidden.
 
 ## Resources and isolation
 
