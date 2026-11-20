@@ -42,11 +42,11 @@ Follows `system1-quality`; CI slot definitions and pinned `base-ci` revision liv
 
 ## Resources & Isolation
 
-| Lane | Endpoint / State | Boundary |
-| --- | --- | --- |
-| Dev | `http://localhost:5173` (Vite, binds `0.0.0.0`), browser `localStorage` | Local static app; no database or `.env` |
-| L4 E2E | `http://127.0.0.1:4173` (`bun run preview`, Playwright `webServer`) | Isolated local build; never target prod via `COFFEE_BASE_URL` |
-| Prod | `https://coffee.hexly.ai` (Worker `coffee`) | Read-only checks unless release is authorized; no remote `-test` Workers |
+| Lane   | Endpoint / State                                                        | Boundary                                                                 |
+| ------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Dev    | `http://localhost:5173` (Vite, binds `0.0.0.0`), browser `localStorage` | Local static app; no database or `.env`                                  |
+| L4 E2E | `http://127.0.0.1:4173` (`bun run preview`, Playwright `webServer`)     | Isolated local build; never target prod via `COFFEE_BASE_URL`            |
+| Prod   | `https://coffee.hexly.ai` (Worker `coffee`)                             | Read-only checks unless release is authorized; no remote `-test` Workers |
 
 ## Retrospective
 
