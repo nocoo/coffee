@@ -33,10 +33,20 @@ export default defineConfig({
     },
   },
   test: {
+    allowOnly: false,
+    passWithNoTests: false,
     include: ['tests/**/*.test.ts'],
     environment: 'node',
     coverage: {
       provider: 'v8',
+      // Non-View production logic and data only; View .tsx components are covered by L4 E2E.
+      include: ['src/lib/**/*.ts', 'src/data/**/*.ts'],
+      exclude: [
+        // Type-only definitions (no executable statements)
+        'src/data/types.ts',
+        // Browser AudioContext synthesis — covered by browser E2E
+        'src/lib/sound.ts',
+      ],
       reporter: ['text', 'json', 'html'],
       thresholds: { statements: 95, branches: 95, functions: 95, lines: 95 },
     },

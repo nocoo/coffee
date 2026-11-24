@@ -37,7 +37,7 @@ bun run deploy              # validate + deploy:check + wrangler deploy (owner o
 Follows `system1-quality`; CI slot definitions and pinned `base-ci` revision live in `.github/workflows/quality-slots.yml` (invoked by `.github/workflows/ci.yml` `Verify coffee`; `quality / Z1: Gate` required on `main`). Status vocabulary: `enforced`, `planned`, `manual`, `N/A`.
 
 - **Exceptions / gaps**: `L2 Runtime` (`N/A`, static site and static `/api/live`), `L3 Integration` (`N/A`, no app API), `P1 Package` (`N/A`, Cloudflare Worker, not npm); docs review is `manual`.
-- **Enforcement**: `L1 Unit` enforces 95% Vitest/V8 floors (`vite.config.ts`); `L4 E2E` uses `playwright.config.ts`; `.github/workflows/release.yml` deploys after green `Verify coffee`. Never weaken CI or hooks.
+- **Enforcement**: `L1 Unit` enforces 95% Vitest/V8 floors (`vite.config.ts`: `allowOnly: false`, `passWithNoTests: false`, covering `src/lib/**/*.ts` and `src/data/**/*.ts`, excluding `src/data/types.ts`, `src/lib/sound.ts`, and View `.tsx` files); `L4 E2E` uses `playwright.config.ts`; `.github/workflows/release.yml` deploys after green `Verify coffee`. Never weaken CI or hooks.
 - **Local hooks**: no `.husky/` or `.githooks/` installed (local hooks `planned`); run `bun run validate` before committing and never pass `--no-verify`.
 
 ## Resources & Isolation
