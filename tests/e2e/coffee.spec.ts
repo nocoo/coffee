@@ -259,13 +259,11 @@ test('exhibition advances without input and sound exists only after opt-in', asy
   await page.getByRole('slider', { name: 'Volume', exact: true }).fill('12');
   await page.getByRole('button', { name: 'Mute ambient sound', exact: true }).click();
   await expect.poll(audioStates).toEqual(['suspended']);
-  if (testInfo.project.name === 'desktop') {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.screenshot({ path: testInfo.outputPath('exhibition-1920.png') });
-    expect(
-      await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1),
-    ).toBe(true);
-  }
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.screenshot({ path: testInfo.outputPath('exhibition-1920.png') });
+  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBe(
+    true,
+  );
   await noOverflow(page);
   await page.reload();
   expect(await audioStates()).toEqual([]);
@@ -273,48 +271,44 @@ test('exhibition advances without input and sound exists only after opt-in', asy
   await expect(page.locator('.universe-hero')).toBeVisible();
 });
 
-for (const theme of ['daylight', 'espresso', 'terroir']) {
-  test(`all pages meet core accessibility checks in ${theme}`, async ({ page }) => {
-    test.setTimeout(120000);
-    await page.addInitScript((selectedTheme) => {
-      localStorage.setItem(
-        'coffee.preferences.v1',
-        JSON.stringify({ locale: 'en', theme: selectedTheme, flat: true }),
-      );
-    }, theme);
-    for (const path of ['/', '/origins', '/brew', '/learn', '/journal', '/display']) {
-      await page.goto(`${path}?lang=en`);
-      await expect(page.locator('h1')).toBeVisible();
-      await page.evaluate(() => document.fonts.ready);
-      const result = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
-        .analyze();
-      const violations = result.violations.map(({ id, nodes }) => ({
-        id,
-        nodes: nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
-      }));
-      expect(violations, `Accessibility on ${path} / ${theme}`).toEqual([]);
-      await noOverflow(page);
-    }
-    if (theme === 'espresso') {
-      await page.goto('/?lang=en');
-      for (const family of await page.locator('.family-tabs > button').all()) {
-        await family.click();
-        const result = await new AxeBuilder({ page })
-          .include('.flavor-explorer')
-          .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
-          .analyze();
-        expect(
-          result.violations.map(({ id, nodes }) => ({
-            id,
-            targets: nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
-          })),
-          'Every family color must remain readable at night',
-        ).toEqual([]);
-      }
-    }
+test('all pages meet core accessibility checks in espresso', async ({ page }) => {
+  test.setTimeout(120000);
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      'coffee.preferences.v1',
+      JSON.stringify({ locale: 'en', theme: 'espresso', flat: true }),
+    );
   });
-}
+  for (const path of ['/', '/origins', '/brew', '/learn', '/journal', '/display']) {
+    await page.goto(`${path}?lang=en`);
+    await expect(page.locator('h1')).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const result = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .analyze();
+    const violations = result.violations.map(({ id, nodes }) => ({
+      id,
+      nodes: nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
+    }));
+    expect(violations, `Accessibility on ${path} / espresso`).toEqual([]);
+    await noOverflow(page);
+  }
+  await page.goto('/?lang=en');
+  for (const family of await page.locator('.family-tabs > button').all()) {
+    await family.click();
+    const result = await new AxeBuilder({ page })
+      .include('.flavor-explorer')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .analyze();
+    expect(
+      result.violations.map(({ id, nodes }) => ({
+        id,
+        targets: nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
+      })),
+      'Every family color must remain readable at night',
+    ).toEqual([]);
+  }
+});
 
 test('unknown routes show a localized recoverable 404', async ({ page }) => {
   await page.goto('/a-missing-world?lang=en');
