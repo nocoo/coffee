@@ -30,14 +30,14 @@ bun run deploy              # validate + deploy:check + wrangler deploy (owner o
 - MVVM: keep viewmodels/logic (`src/lib`) free of View/DOM imports and keep page routes thin.
 - Version authority is `package.json` `"version"` (`1.2.3`), displayed as `v1.2.3`.
 - Never point Playwright at production via `COFFEE_BASE_URL` during local or CI E2E runs.
-- Production release (`bun run deploy` or `v*.*.*` tag, owner `CLOUDFLARE_API_TOKEN`) requires explicit authorization; run `bun run validate` and `bun run deploy:check` first ([Deployment](docs/deployment.md)).
+- Production release (`bun run deploy` or `main` push CD, owner `CLOUDFLARE_API_TOKEN`) requires explicit authorization; run `bun run validate` and `bun run deploy:check` first ([Deployment](docs/deployment.md)).
 
 ## Quality & Local Gates
 
-Follows `system1-quality`; CI slot definitions and pinned `base-ci` revision live in `.github/workflows/quality-slots.yml` (invoked by `.github/workflows/ci.yml` `Verify coffee`; `quality / Z1: Gate` required on `main`). Status vocabulary: `enforced`, `planned`, `manual`, `N/A`.
+Follows `system1-quality`; CI slot definitions and pinned `base-ci` revision live in `.github/workflows/quality-slots.yml` (invoked by `.github/workflows/pipeline.yml`; `quality / Z1: Gate` required on `main`). Status vocabulary: `enforced`, `planned`, `manual`, `N/A`.
 
 - **Exceptions / gaps**: `L2 Runtime` (`N/A`, static site and static `/api/live`), `L3 Integration` (`N/A`, no app API); docs review is `manual`.
-- **Enforcement**: `L1 Unit` enforces 80% Vitest/V8 floors (`vite.config.ts`: `allowOnly: false`, `passWithNoTests: false`, covering `src/lib/**/*.ts` and `src/data/**/*.ts`, excluding `src/data/types.ts`, `src/lib/sound.ts`, and View `.tsx` files); `P1 Package` validates `bunx wrangler deploy --dry-run` against the `B1` artifact; `L4 E2E` uses `playwright.config.ts` (Desktop Chromium core smoke, reusing the `B1` `dist` artifact in CI); `.github/workflows/release.yml` deploys after green `Verify coffee`. Never weaken CI or hooks.
+- **Enforcement**: `L1 Unit` enforces 80% Vitest/V8 floors (`vite.config.ts`: `allowOnly: false`, `passWithNoTests: false`, covering `src/lib/**/*.ts` and `src/data/**/*.ts`, excluding `src/data/types.ts`, `src/lib/sound.ts`, and View `.tsx` files); `P1 Package` validates `bunx wrangler deploy --dry-run` against the `B1` artifact; `L4 E2E` uses `playwright.config.ts` (Desktop Chromium core smoke, reusing the `B1` `dist` artifact in CI); `.github/workflows/pipeline.yml` runs `deploy` (`D1`–`D5` via `deploy-worker.yml`) on `main` push after `quality / Z1: Gate` passes (or `workflow_dispatch` with `deploy=true`), reusing `b1-dist` without rebuilding and verifying `https://coffee.hexly.ai/api/live` against `package.json`. Never weaken CI or hooks.
 - **Local hooks**: no `.husky/` or `.githooks/` installed (local hooks `planned`); run `bun run validate` before committing and never pass `--no-verify`.
 
 ## Resources & Isolation
